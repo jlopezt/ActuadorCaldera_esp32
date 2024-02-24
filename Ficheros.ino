@@ -11,7 +11,7 @@
 boolean inicializaFicheros(int debug)
 {
   //inicializo el sistema de ficheros
-  if (!SPIFFS.begin()) 
+  if (!SPIFFS.begin(true)) 
     {
     Serial.println("No se puede inicializar el sistema de ficheros");
     return (false);

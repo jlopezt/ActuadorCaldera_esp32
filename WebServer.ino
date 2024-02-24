@@ -135,7 +135,6 @@ void handleBloquear()
 void handleActivaRele(void)
   {
   String cad="";
-  int8_t id=0;
 
   if(server.hasArg("id") ) 
     {
@@ -166,7 +165,6 @@ void handleActivaRele(void)
 void handleDesactivaRele(void)
   {
   String cad="";
-  int8_t id=0;
 
   if(server.hasArg("id") ) 
     {
@@ -224,7 +222,7 @@ void handleInfo(void)
   int8_t minutos=(milis/60000)%60;
   int8_t horas=milis/3600000;
 
-  char horaText[9]="";
+  char horaText[12]="";//char horaText[9]="";
   sprintf(horaText,"%02i:%02i:%02i",horas,minutos,segundos);
   cad += String(horaText);
   cad += "<BR>---------------------------------------------<BR>";
@@ -664,6 +662,7 @@ bool handleFileRead(String path)
 
     File file = SPIFFS.open(path, "r");                    // Open the file
     size_t sent = server.streamFile(file, contentType);    // Send it to the client
+    Serial.printf("Enviados %u bytes\n",sent);
     file.close();                                          // Close the file again
     //Serial.println(String("\tSent file: ") + path);
     return true;
@@ -671,6 +670,7 @@ bool handleFileRead(String path)
   //Serial.println(String("\tFile Not Found: ") + path);   // If the file doesn't exist, return false
   return false;
   }
+
 /*** MIGRA ESP32 **
 bool handleFileReadChunked(String path) 
   { // send the right file to the client (if it exists)

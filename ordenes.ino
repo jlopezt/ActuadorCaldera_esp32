@@ -58,7 +58,7 @@ int EjecutaOrdenes(int debug){
   String parametros="";
   int iParametro=0;
   char sParametro[LONG_PARAMETRO]="";//LONG_PARAMETRO longitud maxmima del parametro
-  float fParametro;
+  float fParametro=0;
   int inicioParametro=0;
 
   if (debug) Serial.printf("Orden recibida: %s\n",ordenRecibida);
@@ -225,6 +225,9 @@ void inicializaOrden(void)
   comandos[i].descripcion="Escribe estado en un GPIO";
   comandos[i++].p_func_comando=func_comando_gpioL;
   
+  comandos[i].comando="LeeGPIO";
+  comandos[i].descripcion="Lee estado en un GPIO";
+  comandos[i++].p_func_comando=func_comando_LeeGpio;  
   //resto
   for(;i<MAX_COMANDOS;)
     {
@@ -233,7 +236,7 @@ void inicializaOrden(void)
     comandos[i++].p_func_comando=func_comando_vacio;  
     }
     
-  func_comando_help(0,"",0.0);
+  func_comando_help(0,(char *)"",0.0);
   //for(int8_t i=0;i<MAX_COMANDOS;i++) if (comandos[i].comando!=String("vacio")) Serial.printf("Comando %i: [%s]\n",i, comandos[i].comando.c_str());  
   }
 
@@ -348,7 +351,7 @@ void func_comando_info(int iParametro, char* sParametro, float fParametro)//"inf
 
 void func_comando_fexist(int iParametro, char* sParametro, float fParametro)//"fexist")
   {
-  if (sParametro=="") Serial.println("Es necesario indicar un nombre de fichero");
+  if (sParametro==(char *)"") Serial.println("Es necesario indicar un nombre de fichero");
   else
     {
     if(SPIFFS.exists(sParametro)) Serial.printf("El fichero %s existe.\n",sParametro);
@@ -381,7 +384,7 @@ void func_comando_finfo(int iParametro, char* sParametro, float fParametro)//"fi
 
 void func_comando_fopen(int iParametro, char* sParametro, float fParametro)//"fopen")
   {
-  if (sParametro=="") Serial.println("Es necesario indicar un nombre de fichero");
+  if (sParametro==(char *)"") Serial.println("Es necesario indicar un nombre de fichero");
   else
     {
     File f = SPIFFS.open(sParametro, "r");
@@ -402,7 +405,7 @@ void func_comando_fopen(int iParametro, char* sParametro, float fParametro)//"fo
 
 void func_comando_fremove(int iParametro, char* sParametro, float fParametro)//"fremove")
   {
-  if (sParametro=="") Serial.println("Es necesario indicar un nombre de fichero");
+  if (sParametro==(char *)"") Serial.println("Es necesario indicar un nombre de fichero");
   else
     { 
     if (SPIFFS.remove(sParametro)) Serial.printf("Fichero %s borrado\n",sParametro);
@@ -468,7 +471,9 @@ void func_comando_echo(int iParametro, char* sParametro, float fParametro)//"ech
 
 void func_comando_debug(int iParametro, char* sParametro, float fParametro)//"debug")
   {
-  ++debugGlobal=debugGlobal % 2;
+  //++debugGlobal=debugGlobal % 2;
+  //debugGlobal=(++debugGlobal) % 2;
+  debugGlobal=(debugGlobal==0?1:0);
   if (debugGlobal) Serial.println("debugGlobal esta on");
   else Serial.println("debugGlobal esta off");
   }
@@ -481,7 +486,7 @@ void func_comando_getSSID(int iParametro, char* sParametro, float fParametro)//"
 void func_comando_contadores(int iParametro, char* sParametro, float fParametro)//"debug")
   {
   Serial.printf("vueltas= %i\n",vuelta);  
-  Serial.printf("anchoLoop= %i\n",anchoLoop);
+  Serial.printf("anchoLoop= %li\n",anchoLoop);
   Serial.printf("multiplicadorAnchoIntervalo= %i\n",multiplicadorAnchoIntervalo);
   Serial.printf("anchoIntervalo= %i\n",anchoIntervalo);
   Serial.printf("frecuenciaOTA= %i | %i\n",frecuenciaOTA,vuelta%frecuenciaOTA);
@@ -508,4 +513,11 @@ void func_comando_gpioL(int iParametro, char* sParametro, float fParametro)//"de
   digitalWrite(iParametro, LOW);  
   Serial.printf("Escribe LOW en el gpio %i\n", iParametro);  
   }  
+
+void func_comando_LeeGpio(int iParametro, char* sParametro, float fParametro)//"debug")
+  {
+  int valor=digitalRead(iParametro);
+  Serial.printf("Estado de gpio %i: %i\n", iParametro, valor);  
+  }  
+
 /***************************** FIN funciones para comandos ******************************************/ 

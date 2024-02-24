@@ -56,7 +56,7 @@ void progresoOTA(unsigned int progress, unsigned int total)
   String cad="";
   float avance=100*(float)progress/total;
 
-  Serial.printf("actualizacion OTA en progreso: %5.1f %  :  ",avance);
+  Serial.printf("actualizacion OTA en progreso: %5.1f %% :  ",avance);
   }
 
 void errorOTA(ota_error_t error)

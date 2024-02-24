@@ -86,7 +86,7 @@ void inicializaReles()
           digitalWrite(reles[i].pinLed, LOW);  //lo inicializo a apagado
           }
         
-        Serial.printf("Nombre rele[%i]=%s | pin rele: %i | pin led: %i | inicio: %i |estado: %i \ topic mensajes: %s\n",i,reles[i].nombre.c_str(),reles[i].pin,reles[i].pinLed,reles[i].inicio,reles[i].estado,reles[i].topicMensajes.c_str());
+        Serial.printf("Nombre rele[%i]=%s | pin rele: %i | pin led: %i | inicio: %i |estado: %i | topic mensajes: %s\n",i,reles[i].nombre.c_str(),reles[i].pin,reles[i].pinLed,reles[i].inicio,reles[i].estado,reles[i].topicMensajes.c_str());
         }
       }
     }  
@@ -200,12 +200,12 @@ void actuaReles(int debug)
   //calculo el tiempo desde que se inicio el intervalo de seguridada
   if(millis()>inicioSeguridad) intervaloTrascurrido=millis()-inicioSeguridad; //normal
   else intervaloTrascurrido=(UINT32_MAX-inicioSeguridad)+millis(); //si ha desbordado el contador de millis
-  if(debug) Serial.printf("intervaloTrascurrido: %li | inicioSeguridad: %li | millis: %li\n",intervaloTrascurrido,inicioSeguridad,millis());
+  if(debug) Serial.printf("intervaloTrascurrido: %lu | inicioSeguridad: %lu | millis: %lu\n",(unsigned long)intervaloTrascurrido,(unsigned long)inicioSeguridad,(unsigned long)millis());
 
   //si se ha sobrepasado el tiempo de guarda, desconecto
   if(intervaloTrascurrido>contadorSeguridad) 
     {
-    Serial.printf("¡¡ATENCION!! Se desconecta por tiempo de proteccion\nIntervalo transcurrido: %i \| tiempo de guarda: %i\n",intervaloTrascurrido,contadorSeguridad);
+    Serial.printf("¡¡ATENCION!! Se desconecta por tiempo de proteccion\nIntervalo transcurrido: %i | tiempo de guarda: %i\n",intervaloTrascurrido,contadorSeguridad);
 
     //llevo todos al mismo estado que cuando se apaga el modulo, debe ser seguro
     for(int8_t id=0;id<MAX_RELES;id++) conmutaRele(id,!nivelActivo,false);
@@ -326,7 +326,7 @@ String generaJsonEstado(void)
   for(int8_t i=0;i<MAX_RELES;i++)
     {
     if(i>0) cad += ",\n\t"; //si no es la primera
-    cad += """ + nombreRele(i) + """;
+    cad += """" + nombreRele(i) + """";
     cad += ": ";
     cad += estadoRele(i);  
     }

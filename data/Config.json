@@ -1,6 +1,6 @@
 {
 	"nombre": "Actuador",
-	"NivelActivo":0,
+	"NivelActivo":1,
 
 	"ahorroEnergia": 0, 
 	"multiplicadorAnchoIntervalo": 5, 

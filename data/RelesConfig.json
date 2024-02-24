@@ -1,9 +1,9 @@
 {
-	"contadorSeguridad": 180,
+  "contadorSeguridad": 180,
   "Reles": [	
     {
-    "Dx":  19, 
-    "DxLed": 22,
+    "Dx":  16, 
+    "DxLed": 4,
     "nombre": "Calefaccion", 
     "inicio": "off",
     "Estados": [
@@ -17,17 +17,17 @@
     "topicMensajes": "mensajes"
     },
     {
-    "Dx":  21, 
-    "DxLed": 23,
-    "nombre": "Otros", 
+    "Dx":  2, 
+    "DxLed": 5,
+    "nombre": "Seguridad", 
     "inicio": "on",
     "Estados": [
       {"valor": 0, "texto": "Modulo de calefaccion desconectado."},
-      {"valor": 1, "texto": "Modulo de calefaccion conectado."}
+      {"valor": 1, "texto": "Modulo de calefaccion activo."}
       ],
     "Mensajes": [
-      {"valor": 0, "texto": "Se ha desconectado el control de la calefaccion"},
-      {"valor": 1, "texto": "Se ha conectado el control de la calefaccion"}
+      {"valor": 0, "texto": "Se ha bloqueado el control de la calefaccion."},
+      {"valor": 1, "texto": "El modulo de control de la calefaccion esta activo."}
       ],
     "topicMensajes": "mensajesXXX"
     }

@@ -40,9 +40,11 @@
 #define FRECUENCIA_ENVIO_DATOS   300 //cada cuantas vueltas de loop envia al broker el estado de E/S
 #define FRECUENCIA_WIFI_WATCHDOG 100 //cada cuantas vueltas comprueba si se ha perdido la conexion WiFi
 
+#define BOTON_RESET 34
 #ifndef LED_BUILTIN
-#define LED_BUILTIN 2
+#define LED_BUILTIN 32
 #endif
+
 #include "rom/rtc.h"
 
 //Includes generales
@@ -96,7 +98,8 @@ void setup()
   Serial.begin(115200);
   configuraLed();
   enciendeLed();
-    
+
+  
   Serial.printf("\n\n\n");
   Serial.printf("*************** %s ***************\n",NOMBRE_FAMILIA);
   Serial.printf("*************** %s ***************\n",VERSION);
@@ -110,7 +113,13 @@ void setup()
   //Serial.printf("\nMotivo del reinicio: %s\n",ESP.getResetReason().c_str());
   for(int8_t core=0;core<2;core++) Serial.printf("Motivo del reinicio (%i): %s\n",core,reset_reason(rtc_get_reset_reason(core)));  
   /***MIGRA ESP32***/
-  
+
+  /*******************************************/
+  //Modulo de Fernando
+  pinMode(BOTON_RESET, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  /*******************************************/
+
   Serial.printf("\n\nInit Ficheros ---------------------------------------------------------------------\n");
   //Ficheros - Lo primero para poder leer los demas ficheros de configuracion
   inicializaFicheros(debugGlobal);
@@ -167,6 +176,8 @@ void  loop()
   //referencia horaria de entrada en el bucle
   time_t EntradaBucle=millis();//Hora de entrada en la rodaja de tiempo
 
+  if(digitalRead(BOTON_RESET)==0) ESP.restart();
+  
   //------------- EJECUCION DE TAREAS --------------------------------------
   //Acciones a realizar en el bucle   
   //Prioridad 0: OTA es prioritario.
@@ -277,7 +288,7 @@ boolean parseaConfiguracionGlobal(String contenido)
 /**********************************************************************/  
 String generaJsonConfiguracionNivelActivo(String configActual, int nivelAct)
   {
-  boolean nuevo=true;
+  //boolean nuevo=true;
   String salida="";
 
   if(configActual=="") 

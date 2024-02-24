@@ -328,6 +328,8 @@ boolean conectaMQTT(void)
     if(intentos++>=2) return (false);
     delay(timeReconnectMQTT);      
     }
+    //Si no ha conectado
+    return(false);
   }
 
 /********************************************/
@@ -360,7 +362,8 @@ boolean enviarMQTT(String topic, String payload)
       return(clienteMQTT.endPublish()); //int endPublish();
       }
     }
-  else return (false);
+  
+  return (false);
   }
 
 /********************************************/
@@ -390,7 +393,9 @@ void enviaDatos(boolean debug)
     if(debug)Serial.println("Inicio envio de json al broker.");
     
     //Lo envio al bus    
-    if(enviarMQTT(topic, payload)) if(debug)Serial.println("Enviado json al broker con exito.");
+    if(enviarMQTT(topic, payload)) {
+      if(debug)Serial.println("Enviado json al broker con exito.");
+    }
     else if(debug)Serial.println("¡¡Error al enviar json al broker!!");
     }
   else if(debugGlobal) Serial.printf("No publico estado. Publicar estado es %i\n",publicarEstado);  
